@@ -85,26 +85,39 @@ function moveByKeys(event) {
 function moveUp() {
   //Mover Arriba
   console.log("me quieron mover hacia arriba")
-  playerPosition.y -= elementsSize // la posicon de Y va ser el valor de elementSize
-  startGame()
+  if ([playerPosition.y - elementsSize] < elementsSize) {
+    console.log("OUT")
+  } else {
+    playerPosition.y -= elementsSize // la posicon de Y va ser el valor de elementSize
+    startGame()
+  }
 }
 function moveLeft() {
   //Mover a la Izquierda
-  playerPosition.x -= elementsSize // la posicon de x va ser el valor de elementSize
-  startGame()
-  console.log("me quieron mover hacaia la izquierda")
+  if ([playerPosition.x - elementsSize] < elementsSize) {
+    console.log("OUT")
+  } else {
+    playerPosition.x -= elementsSize // la posicon de x va ser el valor de elementSize
+    startGame()
+  }
 }
 function moveRight() {
   //MOver a la derecha
-  playerPosition.x += elementsSize // la posicon de x va ser el valor de elementSize
-  startGame()
-  console.log("me quieron mover hacia la derecha")
+  if ([playerPosition.x + elementsSize] > canvasSize) {
+    console.log("OUT")
+  } else {
+    playerPosition.x += elementsSize // la posicon de x va ser el valor de elementSize
+    startGame()
+  }
 }
 function moveDown() {
   // Mover Abajo
-  playerPosition.y += elementsSize // la posicon de Y va ser el valor de elementSize
-  startGame()
-  console.log("me quieron mover hacia abajo")
+  if ([playerPosition.y + elementsSize] > canvasSize) {
+    console.log("OUT")
+  } else {
+    playerPosition.y += elementsSize // la posicon de x va ser el valor de elementSize
+    startGame()
+  }
 }
 
 //   game.fillText(emojis["X"], 100, 100)
