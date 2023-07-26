@@ -8,6 +8,7 @@ const btnDown = document.querySelector("#down")
 let canvasSize //Es variable el tama;a del cambas
 let elementsSize // Es variable el tama;no del elemento
 let level = 0 //indicamos que va a empezar en el nivel 0
+let lives = 3 // Le vamos a dar 3 vidas siempre para que inicie
 
 const playerPosition = {
   //Creamos la posicion del jugador
@@ -98,6 +99,22 @@ function levelWin() {
   startGame() // llamamos a la funcion stargame por que alla estan los niveles
 }
 
+function levelFail() {
+  // Creamos la funcion la funcion para cuando chocamos
+  lives-- // si chocamos las vidas van a disminuir
+
+  console.log(`Vidas: ${lives}`)
+
+  if (lives <= 0) {
+    // si nos quedamos sin vidas
+    level = 0 // volvemos al nivel 1
+    lives = 3 // y volvemos a tener 3 vidas
+  }
+  playerPosition.x = undefined
+  playerPosition.y = undefined
+  startGame() // llamamos a stargame
+}
+
 function gameWin() {
   //Creamos la funcion para acabar el juego
   console.log("Ganaste el juego")
@@ -121,7 +138,7 @@ function movePlayer() {
 
   if (enemyCollision) {
     // si hay colicion
-    console.log("Chocaste")
+    levelFail()
   }
 
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y) // le inertamos el emoji a la posicion en X & Y
