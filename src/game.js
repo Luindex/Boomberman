@@ -14,6 +14,13 @@ const playerPosition = {
   y: undefined,
 }
 
+const giftPosition = {
+  x: undefined,
+  y: undefined,
+}
+
+let enemyPosition = [] //creamos un array de Cada posicion de los enemigos
+
 window.addEventListener("load", setCanvasSize) //Escuchar apenas cargue el archivo HTML
 window.addEventListener("resize", setCanvasSize) //escuchamos el reize, que lo que hace es que cada vez que se cambie el tama;o de la pantalla llama a la function Stargame
 
@@ -42,6 +49,8 @@ function startGame() {
   const mapRowCols = mapRows.map((row) => row.trim().split(""))
   console.log({ map, mapRows, mapRowCols })
 
+  enemyPosition = []
+
   game.clearRect(0, 0, canvasSize, canvasSize)
   mapRowCols.forEach((row, rowI) => {
     row.forEach((col, colI) => {
@@ -56,6 +65,17 @@ function startGame() {
           playerPosition.y = posy // y tambien en Y
           console.log({ playerPosition })
         }
+      } else if (col === "I") {
+        // si el objeto es "I"
+        giftPosition.x = posx // va ser el mismo valor en cordenadas de x
+        giftPosition.y = posy
+      } else if (col === "X") {
+        //si el elemento es X
+        enemyPosition.push({
+          //la vamos a insertar posicion x , y
+          x: posx,
+          y: posy,
+        })
       }
 
       game.fillText(emoji, posx, posy)
@@ -65,6 +85,26 @@ function startGame() {
 }
 
 function movePlayer() {
+  const gitfColisionX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3) //toFixed es para formatear el numero y darle que tantos deciamles queremos
+  const gitfColisionY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3)
+  const giftColision = gitfColisionX && gitfColisionY // aqui tienen que ser iguales, para que halla una colision
+
+  if (giftColision) {
+    // si hay colicion con el Regalo
+    console.log("Avanzas de Nivel")
+  }
+
+  const enemyCollision = enemyPosition.find((enemy) => {
+    const enemyCollisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3) // si el enemigo es igual al jugador en X
+    const enemyCollisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3) // si el enemigo es igual al jugador en Y
+    return enemyCollisionX && enemyCollisionY // si x , y son iguales
+  })
+
+  if (enemyCollision) {
+    // si hay colicion
+    console.log("Chocaste")
+  }
+
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y) // le inertamos el emoji a la posicion en X & Y
 }
 
