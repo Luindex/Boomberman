@@ -46,14 +46,14 @@ maps.push(`
       XX-----OXX
       XXXXXXXXXX
     `)
-maps.push(`
-      XXXXX--XXX
-      XXXXXX-XXX
-      XX-XXX---X
-      XX-------X
-      XX-XXXXXXX
-      XX-X---XXX
-      XX-XOX-XXX
-      XX-XXX-XXX
-      XX-----XXX
-    `)
+// maps.push(`
+//       XXXXX--XXX
+//       XXXXXX-XXX
+//       XX-XXX---X
+//       XX-------X
+//       XX-XXXXXXX
+//       XX-X---XXX
+//       XX-XOX-XXX
+//       XX-XXX-XXX
+//       XX-----XXX
+//     `)

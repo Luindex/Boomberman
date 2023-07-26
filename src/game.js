@@ -7,6 +7,7 @@ const btnDown = document.querySelector("#down")
 
 let canvasSize //Es variable el tama;a del cambas
 let elementsSize // Es variable el tama;no del elemento
+let level = 0 //indicamos que va a empezar en el nivel 0
 
 const playerPosition = {
   //Creamos la posicion del jugador
@@ -44,7 +45,13 @@ function startGame() {
   game.font = elementsSize + "px Verdana"
   game.textAlign = "end"
 
-  const map = maps[0]
+  const map = maps[level] //Le damos el nivel
+
+  if (!map) {
+    // si no hay mas mapas
+    gameWin() // llamamos la funcion gameWin()
+    return
+  }
   const mapRows = map.trim().split("\n") //usamos .trim para limpiarlo y con .split le quitamos los saltos de linea
   const mapRowCols = mapRows.map((row) => row.trim().split(""))
   console.log({ map, mapRows, mapRowCols })
@@ -84,6 +91,18 @@ function startGame() {
   movePlayer() // hay que llamar la funcion de movimiento
 }
 
+function levelWin() {
+  //Funcion para incrementar niveles
+  console.log("Subiste de nivel")
+  level++ //Aumentamos el nivel
+  startGame() // llamamos a la funcion stargame por que alla estan los niveles
+}
+
+function gameWin() {
+  //Creamos la funcion para acabar el juego
+  console.log("Ganaste el juego")
+}
+
 function movePlayer() {
   const gitfColisionX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3) //toFixed es para formatear el numero y darle que tantos deciamles queremos
   const gitfColisionY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3)
@@ -91,7 +110,7 @@ function movePlayer() {
 
   if (giftColision) {
     // si hay colicion con el Regalo
-    console.log("Avanzas de Nivel")
+    levelWin()
   }
 
   const enemyCollision = enemyPosition.find((enemy) => {
