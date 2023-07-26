@@ -4,6 +4,7 @@ const btnUp = document.querySelector("#up")
 const btnLeft = document.querySelector("#left")
 const btnRight = document.querySelector("#right")
 const btnDown = document.querySelector("#down")
+const spanLives = document.querySelector("#lives")
 
 let canvasSize //Es variable el tama;a del cambas
 let elementsSize // Es variable el tama;no del elemento
@@ -57,6 +58,8 @@ function startGame() {
   const mapRowCols = mapRows.map((row) => row.trim().split(""))
   console.log({ map, mapRows, mapRowCols })
 
+  showLives()
+
   enemyPosition = []
 
   game.clearRect(0, 0, canvasSize, canvasSize)
@@ -103,8 +106,6 @@ function levelFail() {
   // Creamos la funcion la funcion para cuando chocamos
   lives-- // si chocamos las vidas van a disminuir
 
-  console.log(`Vidas: ${lives}`)
-
   if (lives <= 0) {
     // si nos quedamos sin vidas
     level = 0 // volvemos al nivel 1
@@ -118,6 +119,14 @@ function levelFail() {
 function gameWin() {
   //Creamos la funcion para acabar el juego
   console.log("Ganaste el juego")
+}
+
+function showLives() {
+  const heartsArray = Array(lives).fill(emojis["HEART"]) // creamos un array [❤,❤,❤]
+  console.log(heartsArray)
+
+  spanLives.innerHTML = "" //Limpiamos las vidas antes de hacer el append
+  heartsArray.forEach((heart) => spanLives.append(heart)) // por cada vida
 }
 
 function movePlayer() {
