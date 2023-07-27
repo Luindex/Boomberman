@@ -35,17 +35,26 @@ let enemyPosition = [] //creamos un array de Cada posicion de los enemigos
 window.addEventListener("load", setCanvasSize) //Escuchar apenas cargue el archivo HTML
 window.addEventListener("resize", setCanvasSize) //escuchamos el reize, que lo que hace es que cada vez que se cambie el tama;o de la pantalla llama a la function Stargame
 
+// function fixNumer(n) {
+//   return Number(n.toFixed(2))
+// }
+
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
-    canvasSize = window.innerWidth * 0.8
+    canvasSize = window.innerWidth * 0.7
   } else {
-    canvasSize = window.innerHeight * 0.8
+    canvasSize = window.innerHeight * 0.7
   }
+
+  canvasSize = Number(canvasSize.toFixed(0))
+
   canvas.setAttribute("width", canvasSize)
   canvas.setAttribute("height", canvasSize)
 
   elementsSize = canvasSize / 10 // cada elemento va tener la decima parte de medida del valor del canva
 
+  playerPosition.x = undefined
+  playerPosition.y = undefined
   startGame()
 }
 
@@ -88,7 +97,7 @@ function startGame() {
         if (!playerPosition.x && !playerPosition.y) {
           playerPosition.x = posx // la pedimos la posicion en X
           playerPosition.y = posy // y tambien en Y
-          console.log({ playerPosition })
+          //console.log({ playerPosition })
         }
       } else if (col === "I") {
         // si el objeto es "I"
@@ -160,16 +169,20 @@ function gameWin() {
   console.log("Ganaste el juego")
   clearInterval(timeInterval)
 
-  const recordTime = localStorage.getItem("record_time")
-  const playerTime = Date.now() - timeStar
+  const recordTime = localStorage.getItem("record_time") //creamos un variable en el localstorage
+  const playerTime = Date.now() - timeStar // el tiempo del jugador va ser el tiempo de ahora menos el de inicio
   if (recordTime) {
+    //si hay tiempo record
     if (recordTime > playerTime) {
-      localStorage.setItem("record_time", playerTime)
+      //si el tiempo record es mayor al del jugador
+      localStorage.setItem("record_time", playerTime) // le enviamos un nuevo valor a la variable del localstorage
       pResult.innerHTML = "Superaste el record"
     } else {
+      // si no superamos el record
       pResult.innerHTML = "Record no superado"
     }
   } else {
+    // si es primera vez que lo superamos
     localStorage.setItem("record_time", playerTime)
     pResult.innerHTML =
       "Primera vez ? muy bien ahora intenta superar el recorde otra vez"
@@ -192,7 +205,8 @@ function showTime() {
 }
 
 function showRecord() {
-  spanRecord.innerHTML = localStorage.getItem("record_time")
+  //Creamos la funcion del record
+  spanRecord.innerHTML = localStorage.getItem("record_time") // le enviamos al html el tiempo record
 }
 
 window.addEventListener("keydown", moveByKeys)
