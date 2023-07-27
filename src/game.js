@@ -5,11 +5,17 @@ const btnLeft = document.querySelector("#left")
 const btnRight = document.querySelector("#right")
 const btnDown = document.querySelector("#down")
 const spanLives = document.querySelector("#lives")
+const spanTime = document.querySelector("#time")
 
 let canvasSize //Es variable el tama;a del cambas
 let elementsSize // Es variable el tama;no del elemento
 let level = 0 //indicamos que va a empezar en el nivel 0
 let lives = 3 // Le vamos a dar 3 vidas siempre para que inicie
+
+//Variables del Tiempo del jugador
+let timePlayer
+let timeInterval
+let timeStar
 
 const playerPosition = {
   //Creamos la posicion del jugador
@@ -54,6 +60,11 @@ function startGame() {
     gameWin() // llamamos la funcion gameWin()
     return
   }
+
+  if (!timeStar) {
+    timeStar = Date.now()
+    timeInterval = setInterval(showTime, 100) // llamamos a la Funcion cada 0.1 segundos
+  }
   const mapRows = map.trim().split("\n") //usamos .trim para limpiarlo y con .split le quitamos los saltos de linea
   const mapRowCols = mapRows.map((row) => row.trim().split(""))
   console.log({ map, mapRows, mapRowCols })
@@ -61,8 +72,8 @@ function startGame() {
   showLives()
 
   enemyPosition = []
-
   game.clearRect(0, 0, canvasSize, canvasSize)
+
   mapRowCols.forEach((row, rowI) => {
     row.forEach((col, colI) => {
       const emoji = emojis[col]
@@ -95,40 +106,6 @@ function startGame() {
   movePlayer() // hay que llamar la funcion de movimiento
 }
 
-function levelWin() {
-  //Funcion para incrementar niveles
-  console.log("Subiste de nivel")
-  level++ //Aumentamos el nivel
-  startGame() // llamamos a la funcion stargame por que alla estan los niveles
-}
-
-function levelFail() {
-  // Creamos la funcion la funcion para cuando chocamos
-  lives-- // si chocamos las vidas van a disminuir
-
-  if (lives <= 0) {
-    // si nos quedamos sin vidas
-    level = 0 // volvemos al nivel 1
-    lives = 3 // y volvemos a tener 3 vidas
-  }
-  playerPosition.x = undefined
-  playerPosition.y = undefined
-  startGame() // llamamos a stargame
-}
-
-function gameWin() {
-  //Creamos la funcion para acabar el juego
-  console.log("Ganaste el juego")
-}
-
-function showLives() {
-  const heartsArray = Array(lives).fill(emojis["HEART"]) // creamos un array [❤,❤,❤]
-  console.log(heartsArray)
-
-  spanLives.innerHTML = "" //Limpiamos las vidas antes de hacer el append
-  heartsArray.forEach((heart) => spanLives.append(heart)) // por cada vida
-}
-
 function movePlayer() {
   const gitfColisionX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3) //toFixed es para formatear el numero y darle que tantos deciamles queremos
   const gitfColisionY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3)
@@ -153,6 +130,47 @@ function movePlayer() {
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y) // le inertamos el emoji a la posicion en X & Y
 }
 
+function levelWin() {
+  //Funcion para incrementar niveles
+  console.log("Subiste de nivel")
+  level++ //Aumentamos el nivel
+  startGame() // llamamos a la funcion stargame por que alla estan los niveles
+}
+
+function levelFail() {
+  // Creamos la funcion la funcion para cuando chocamos
+  lives-- // si chocamos las vidas van a disminuir
+
+  if (lives <= 0) {
+    // si nos quedamos sin vidas
+    level = 0 // volvemos al nivel 1
+    lives = 3 // y volvemos a tener 3 vidas
+    timeStar = undefined
+  }
+  playerPosition.x = undefined
+  playerPosition.y = undefined
+  startGame() // llamamos a stargame
+}
+
+function gameWin() {
+  //Creamos la funcion para acabar el juego
+  console.log("Ganaste el juego")
+  clearInterval(timeInterval)
+}
+
+function showLives() {
+  const heartsArray = Array(lives).fill(emojis["HEART"]) // creamos un array [❤,❤,❤]
+  console.log(heartsArray)
+
+  spanLives.innerHTML = "" //Limpiamos las vidas antes de hacer el append
+  heartsArray.forEach((heart) => spanLives.append(heart)) // por cada vida
+}
+
+function showTime() {
+  // Creamos la funcion para el tiempo
+  spanTime.innerHTML = Date.now() - timeStar // Date.now es el tiempo que llevamos menos el tiempo que esta transcurriendo
+}
+
 window.addEventListener("keydown", moveByKeys)
 //Escuchar Movimientos
 btnUp.addEventListener("click", moveUp)
@@ -160,6 +178,7 @@ btnLeft.addEventListener("click", moveLeft)
 btnRight.addEventListener("click", moveRight)
 btnDown.addEventListener("click", moveDown)
 //Funcion para mover dependiendo de la letra seleccionada
+
 function moveByKeys(event) {
   if (event.key === "ArrowUp") moveUp() //escuchamos el evento de subir
   else if (event.key === "ArrowLeft") moveLeft() //izquierda
