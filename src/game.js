@@ -6,6 +6,8 @@ const btnRight = document.querySelector("#right")
 const btnDown = document.querySelector("#down")
 const spanLives = document.querySelector("#lives")
 const spanTime = document.querySelector("#time")
+const spanRecord = document.querySelector("#record")
+const pResult = document.querySelector("#result")
 
 let canvasSize //Es variable el tama;a del cambas
 let elementsSize // Es variable el tama;no del elemento
@@ -64,6 +66,7 @@ function startGame() {
   if (!timeStar) {
     timeStar = Date.now()
     timeInterval = setInterval(showTime, 100) // llamamos a la Funcion cada 0.1 segundos
+    showRecord()
   }
   const mapRows = map.trim().split("\n") //usamos .trim para limpiarlo y con .split le quitamos los saltos de linea
   const mapRowCols = mapRows.map((row) => row.trim().split(""))
@@ -156,6 +159,23 @@ function gameWin() {
   //Creamos la funcion para acabar el juego
   console.log("Ganaste el juego")
   clearInterval(timeInterval)
+
+  const recordTime = localStorage.getItem("record_time")
+  const playerTime = Date.now() - timeStar
+  if (recordTime) {
+    if (recordTime > playerTime) {
+      localStorage.setItem("record_time", playerTime)
+      pResult.innerHTML = "Superaste el record"
+    } else {
+      pResult.innerHTML = "Record no superado"
+    }
+  } else {
+    localStorage.setItem("record_time", playerTime)
+    pResult.innerHTML =
+      "Primera vez ? muy bien ahora intenta superar el recorde otra vez"
+  }
+
+  console.log({ recordTime, playerTime })
 }
 
 function showLives() {
@@ -169,6 +189,10 @@ function showLives() {
 function showTime() {
   // Creamos la funcion para el tiempo
   spanTime.innerHTML = Date.now() - timeStar // Date.now es el tiempo que llevamos menos el tiempo que esta transcurriendo
+}
+
+function showRecord() {
+  spanRecord.innerHTML = localStorage.getItem("record_time")
 }
 
 window.addEventListener("keydown", moveByKeys)
